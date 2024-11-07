@@ -9,11 +9,19 @@ const firebaseServerConfigs = require('./firebaseConfig');
 const app = express(); 
 app.use(cookieParser()); 
 
-const key = firebaseServerConfigs.private_key;
+//const key = firebaseServerConfigs.private_key;
+
+const key = process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n');
+
+if (!key) {
+	console.error("Firebase private key is not defined.");
+	process.exit(1);
+  }
 
 admin.initializeApp({
 	credential: admin.credential.cert({
-	  "private_key": key.replace(/\\n/g, '\n'),
+		"private_key": key,
+	  //"private_key": key.replace(/\\n/g, '\n'),
 	  "client_email": firebaseServerConfigs.client_email,
 	  "project_id": firebaseServerConfigs.project_id
 	})
@@ -66,11 +74,19 @@ function checkCookie(req, res, next) {
 			req.decodedClaims = decodedClaims; 
 			next(); 
 		}) 
-		.catch(error => { 
+		.catch(error => {
 
-		// Session cookie is unavailable or invalid. 
-		// Force user to login. 
 		res.redirect('/'); 
 		}); 
 } 
+
+https.createServer({ 
+	key: fs.readFileSync('server.key'), 
+	cert: fs.readFileSync('server.cert') 
+}, app) 
+.listen(3000, function () { 
+	console.log('listening on port 3000!'
+	+ ' Go to https://localhost:3000/') 
+}); 
+
  

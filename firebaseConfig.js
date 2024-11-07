@@ -1,7 +1,11 @@
 require('dotenv').config();
 
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+// import { initializeApp } from "firebase/app";
+// import { getAnalytics } from "firebase/analytics";
+const { initializeApp } = require('firebase/app');
+// const {getAnalytics,  isSupported} = require('firebase/analytics');
+
+
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -15,7 +19,18 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// const analytics = getAnalytics(app);
+
+// if (isSupported()) {
+//   const analytics = getAnalytics(app);
+// } else {
+//   console.log('Firebase Analytics is not supported in this environment.');
+// }
+module.exports = {
+  private_key: process.env.FIREBASE_PRIVATE_KEY,
+  client_email: process.env.FIREBASE_CLIENT_EMAIL,
+  project_id: process.env.FIREBASE_PROJECT_ID,
+};
 
 
 
